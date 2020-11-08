@@ -1,14 +1,14 @@
 <?php
 
-
 class MemberModel extends CI_MODEL
 {
     public function __construct()
     {
         parent::__construct();
+        $this->load->library('session');
     }
 
-    public function CreateMember($data)
+    public function createMember($data)
     {
         $passwd = $data['passwd'];
         $passwd = password_hash($passwd,PASSWORD_BCRYPT);
@@ -27,6 +27,34 @@ class MemberModel extends CI_MODEL
             return 'duplication';
         } else {
             return true;
+        }
+        
+    }
+
+    private function passwordMatch(string $memberid, string $passwd): bool
+    {
+        $this->db
+            ->select('passwd')
+            ->where('id', $memberid);
+
+        $selectPasswd = (array)$this->db->get('member')->row(); //row() 결과값 한줄
+        
+        return password_verify($passwd, $selectPasswd['passwd']);
+    }
+
+    public function loginMember($data)
+    {
+        if($this->passwordMatch($data['memberid'], $data['passwd']))
+        {
+            $id = $data['memberid'];
+            $this->db->where("memberid = $id ");
+            $name = $this->db->select('name');
+            
+            $sessionData = ['memberid' => $id, 'name'=> $name];
+            $this->session->set_userdata($sessionData);
+            return true;
+        } else {
+            return false;
         }
         
     }
