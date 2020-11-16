@@ -15,4 +15,15 @@ class ReservationModel extends CI_MODEL
         return $this->db->get("reservation")->result_array();
     }
 
+    public function insertReservation(array $data)
+    {
+        $this->db->insert('reservation',$data)->error();
+        if($this->db->error())
+        {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }

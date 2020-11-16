@@ -12,7 +12,29 @@ class ReservationService
         $this->CI->load->model("ReservationModel","reservationModel",true);
     }
 
-    public function checkReservation($checkinDay, $checkoutDay) : array
+    function reservation(string $memberId, int $roomNumber, $checkinDay, $checkoutDay)
+    {
+        $roomInfo = $this->CI->roomModel->getRoominfoByNum($roomNumber);
+
+        $checkinDay = date_create($checkinDay);
+        $checkoutDay = date_create($checkoutDay);
+        $price = $roomInfo[0]['price'];
+        $day = date_diff($checkinDay, $checkoutDay)->format('%R%a');
+        $price = ((int)$price * (int)$day);
+
+        $data = [
+            'memberId' => $memberId,
+            'fk_room_number' => $roomNumber,
+            'price' => $price,
+            'check_in' => $checkinDay,
+            'check_out' => $checkoutDay,
+            'resesrvation_date' => date("Y-m-d H:i:s")
+        ];
+
+        $this->reservation->insertReservation($data);
+    }
+
+    public function checkReservation($checkinDay, $checkoutDay)
     {
         $rooms =  $this->CI->roomModel->getAllRoominfo();
         $reservation =  $this->CI->reservationModel->getReselvationInfo($checkinDay, $checkoutDay);
@@ -28,7 +50,7 @@ class ReservationService
             }
         }
 
-        return (array)$rooms;
+        return $rooms;
     }
 
 
