@@ -3,7 +3,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class ReservationService
 {
-    private $CI = null;
+    private $CI;
 
     function __construct()
     {
@@ -12,7 +12,7 @@ class ReservationService
         $this->CI->load->model("ReservationModel","reservationModel",true);
     }
 
-    function reservation(string $memberId, int $roomNumber, $checkinDay, $checkoutDay)
+    function reservation(string $memberid, int $roomNumber, $checkinDay, $checkoutDay)
     {
         $roomInfo = $this->CI->roomModel->getRoominfoByNum($roomNumber);
 
@@ -23,15 +23,15 @@ class ReservationService
         $price = ((int)$price * (int)$day);
 
         $data = [
-            'memberId' => $memberId,
+            'id' => $memberid,
             'fk_room_number' => $roomNumber,
             'price' => $price,
-            'check_in' => $checkinDay,
-            'check_out' => $checkoutDay,
+            'check_in' => $checkinDay->format("Y-m-d H:i:s"),
+            'check_out' => $checkoutDay->format("Y-m-d H:i:s"),
             'resesrvation_date' => date("Y-m-d H:i:s")
         ];
 
-        $this->reservation->insertReservation($data);
+        $this->CI->reservationModel->insertReservation($data);
     }
 
     public function checkReservation($checkinDay, $checkoutDay)
@@ -39,7 +39,7 @@ class ReservationService
         $rooms =  $this->CI->roomModel->getAllRoominfo();
         $reservation =  $this->CI->reservationModel->getReselvationInfo($checkinDay, $checkoutDay);
 
-        foreach ($rooms as $key => $roominfo) 
+        foreach ($rooms as $key => $roominfo)
         {
             foreach ($reservation as $reservationKey => $reservationinfo)
             {

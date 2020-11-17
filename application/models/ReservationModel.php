@@ -11,13 +11,14 @@ class ReservationModel extends CI_MODEL
     public function getReselvationInfo($checkinDay, $checkoutDay): array
     {
         $this->db->where("check_in BETWEEN '$checkinDay' AND '$checkoutDay' ");
-        
+
         return $this->db->get("reservation")->result_array();
     }
 
-    public function insertReservation(array $data)
+    public function insertReservation(array $data): bool
     {
-        $this->db->insert('reservation',$data)->error();
+        $this->db->insert('reservation',$data);
+
         if($this->db->error())
         {
             return false;
