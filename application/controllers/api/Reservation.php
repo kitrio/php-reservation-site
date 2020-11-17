@@ -22,6 +22,9 @@ class Reservation extends RestController {
         ];
 
         $info = $this->reservationservice->checkReservation($data['checkIn'], $data['checkOut']);
+        if($info === null){
+            return $this->response($info, 404);
+        }
         return $this->response($info, 200);
     }
     //예약
@@ -34,7 +37,13 @@ class Reservation extends RestController {
             'checkout' => $this->post('checkout')
         ];
 
-        $this->reservationservice->reservation($data['memberid'], $data['room_number'], $data['checkin'], $data['checkout']);
+        $info = $this->reservationservice->reservation($data['memberid'], $data['room_number'], $data['checkin'], $data['checkout']);
+        if($data['memberid'] === null){
+            return $this->response('',405);
+        } elseif ($info){
+            return $this->response($info, 404);
+        }
+        return $this->response($info, 200);
     }
 
 }
