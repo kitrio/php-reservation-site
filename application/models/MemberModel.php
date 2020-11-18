@@ -16,8 +16,8 @@ class MemberModel extends CI_MODEL
         $this->db->set('id', $data['memberid']);
         $this->db->set('passwd', $passwd);
         $this->db->set('name', $data['name']);
-        $this->db->set('phone_number', $data['phoneNumber']);   
-        
+        $this->db->set('phone_number', $data['phoneNumber']);
+
         $DUPLICATION_ERROR = 1062;
 
         $this->db->insert('member');
@@ -28,7 +28,7 @@ class MemberModel extends CI_MODEL
         } else {
             return true;
         }
-        
+
     }
 
     private function passwordMatch(string $memberid, string $passwd): bool
@@ -38,7 +38,7 @@ class MemberModel extends CI_MODEL
             ->where('id', $memberid);
 
         $selectPasswd = (array)$this->db->get('member')->row(); //row() 결과값 한줄
-        
+
         return password_verify($passwd, $selectPasswd['passwd']);
     }
 
@@ -47,15 +47,16 @@ class MemberModel extends CI_MODEL
         if($this->passwordMatch($data['memberid'], $data['passwd']))
         {
             $id = $data['memberid'];
-            $this->db->where("memberid = $id ");
-            $name = $this->db->select('name');
-            
+            $this->db->select('name')
+                     ->where('id', $id);
+            $name = $this->db->get('member')->row();
+
             $sessionData = ['memberid' => $id, 'name'=> $name];
             $this->session->set_userdata($sessionData);
             return true;
         } else {
             return false;
         }
-        
+
     }
 }
