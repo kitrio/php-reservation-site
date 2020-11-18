@@ -10,13 +10,27 @@ class QnaContentModel extends CI_MODEL
     public function getContents(int $offset)
     {
         $limit = 10;
-        return $this->db->get('qna', $limit, $offset)->result_array();
+        $query = $this->db->get('qna', $limit, $offset)->result_array();
+        if($this->db->error()['code'] === 0)//success
+        {
+            return $query;
+        } else {
+            log_message("error", $this->db->error()['code']. $this->db->error()['message']);
+            return $query = null;
+        }
     }
 
     public function getContentByNum(int $idx)
     {
         $this->db->where('idx',$idx);
-        return $this->db->get('qna')->row();
+        $query = $this->db->get('qna')->row();
+        if($this->db->error()['code'] === 0)//success
+        {
+            return $query;
+        } else {
+            log_message("error", $this->db->error()['code']. $this->db->error()['message']);
+            return $query = null;
+        }
     }
 
     public function insertContent($data)
@@ -28,11 +42,12 @@ class QnaContentModel extends CI_MODEL
 
         $this->db->insert('qna');
 
-        if($this->db->error())
+        if($this->db->error()['code'] === 0)// success
         {
-            return false;
-        } else {
             return true;
+        } else {
+            log_message("error", $this->db->error()['code']. $this->db->error()['message']);
+            return false;
         }
     }
 }
