@@ -25,8 +25,8 @@ class Qna extends RestController
 
     public function content_get()
     {
-        $contentidx = (int)$this->get('idx');
-        $info = $this->qnaModel->getContentByNum($contentidx);
+        $idx = (int)$this->get('idx');
+        $info = $this->qnaModel->getContentByNum($idx);
         if($info === null){
             return $this->response($info, 404);    
         }
@@ -40,7 +40,34 @@ class Qna extends RestController
             'title' => $this->post('title'),
             'content' => $this->post('content')
         ];
-        $info =$this->qnaModel->insertContent('qna', $data);
+        $info = $this->qnaModel->insertContent($data);
+        if($info === null){
+            return $this->response($info, 404);    
+        }
+        return $this->response(true, 200);
+    }
+
+    public function content_put()
+    {
+        $data = [
+            'memberid' => $this->session->memberid,
+            'title' => $this->post('title'),
+            'content' => $this->post('content')
+        ];
+        $info = $this->qnaModel->updateContent($data);
+        if($info === null){
+            return $this->response($info, 404);    
+        }
+        return $this->response(true, 200);
+    }
+
+    public function content_delete()
+    {
+        $data = [
+            'memberid' => $this->session->memberid,
+            'idx' => $this->post('idx')
+        ];
+        $info = $this->qnaModel->deleteContent($data);
         if($info === null){
             return $this->response($info, 404);    
         }

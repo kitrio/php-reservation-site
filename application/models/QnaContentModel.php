@@ -50,4 +50,25 @@ class QnaContentModel extends CI_MODEL
             return false;
         }
     }
+
+    public function updateContent($data)
+    {
+        $this->db->where('writer', $data['memberid']);
+        $this->db->where('idx',$data['idx']);
+    }
+
+    public function deleteContent($data)
+    {
+        $this->db->where('writer', $data['memberid']);
+        $this->db->where('idx',$data['idx']);
+        $this->db->delete('qna');
+
+        if($this->db->error()['code'] === 0)// success
+        {
+            return true;
+        } else {
+            log_message("error", $this->db->error()['code']. $this->db->error()['message']);
+            return false;
+        }
+    }
 }
