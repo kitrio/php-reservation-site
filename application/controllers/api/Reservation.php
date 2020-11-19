@@ -27,6 +27,7 @@ class Reservation extends RestController {
         }
         return $this->response($info, 200);
     }
+    
     //예약
     public function set_post()
     {
@@ -36,11 +37,12 @@ class Reservation extends RestController {
             'checkin' => $this->post('checkin'),
             'checkout' => $this->post('checkout')
         ];
+        if($data['memberid'] === null){
+            return $this->response('not login',405);
+        }
 
         $info = $this->reservationservice->reservation($data['memberid'], $data['room_number'], $data['checkin'], $data['checkout']);
-        if($data['memberid'] === null){
-            return $this->response('',405);
-        } elseif ($info){
+        if ($info){
             return $this->response($info, 404);
         }
         return $this->response($info, 200);
