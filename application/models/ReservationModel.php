@@ -17,8 +17,9 @@ class ReservationModel extends CI_MODEL
 
     public function insertReservation(array $data): bool
     {
+        $this->db->trans_start();
         $this->db->insert('reservation',$data);
-
+        $this->db->trans_complete();
         if($this->db->error())
         {
             return false;

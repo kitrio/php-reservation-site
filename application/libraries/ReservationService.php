@@ -31,7 +31,7 @@ class ReservationService
             'resesrvation_date' => date("Y-m-d H:i:s")
         ];
 
-        $this->CI->reservationModel->insertReservation($data);
+        return $this->CI->reservationModel->insertReservation($data);
     }
 
     public function checkReservation($checkinDay, $checkoutDay)
