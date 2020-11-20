@@ -34,11 +34,20 @@ class Member extends RestController
             'memberid' => $this->post('memberid'),
             'passwd' => $this->post('passwd'),
         ];
+        
         if($this->member->loginMember($data)) {
             return $this->response('success',200);
         } else {
             return $this->response('id또는 비밀번호가 틀렸습니다.',405);
         }
         
+    }
+
+    public function logout_post()
+    {
+        $this->load->library('session');
+        $this->session->sess_destroy();
+
+        return $this->response('success',200);
     }
 }
