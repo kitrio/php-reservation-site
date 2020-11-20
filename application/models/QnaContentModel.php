@@ -42,7 +42,7 @@ class QnaContentModel extends CI_MODEL
 
         $this->db->insert('qna');
 
-        if($this->db->error()['code'] === 0)// success
+        if($this->db->error()['code'] === 0)//success
         {
             return true;
         } else {
@@ -55,6 +55,18 @@ class QnaContentModel extends CI_MODEL
     {
         $this->db->where('writer', $data['memberid']);
         $this->db->where('idx',$data['idx']);
+
+        $this->db->set('title',$data['title']);
+        $this->db->set('content',$data['content']);
+        $this->db->update('qna');
+        print_r($this->db->last_query());
+        if($this->db->error()['code'] === 0)//success
+        {
+            return true;
+        } else {
+            log_message("error", $this->db->error()['code']. $this->db->error()['message']);
+            return false;
+        }
     }
 
     public function deleteContent($data)

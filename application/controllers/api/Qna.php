@@ -50,10 +50,12 @@ class Qna extends RestController
     public function content_put()
     {
         $data = [
+            'idx' => $this->put('idx'),
             'memberid' => $this->session->memberid,
-            'title' => $this->post('title'),
-            'content' => $this->post('content')
+            'title' => $this->put('title'),
+            'content' => $this->put('content')
         ];
+
         $info = $this->qnaModel->updateContent($data);
         if($info === null){
             return $this->response($info, 404);    
@@ -65,7 +67,7 @@ class Qna extends RestController
     {
         $data = [
             'memberid' => $this->session->memberid,
-            'idx' => $this->post('idx')
+            'idx' => $this->delete('idx')
         ];
         $info = $this->qnaModel->deleteContent($data);
         if($info === null){
