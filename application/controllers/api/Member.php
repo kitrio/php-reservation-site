@@ -1,14 +1,14 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
 class Member extends RestController
 {
-    function __construct()
+    public function __construct()
     {
         parent::__construct();
-        $this->load->model('MemberModel', 'member', TRUE);
+        $this->load->model('MemberModel', 'member', true);
         $this->load->library('reservationservice');
     }
 
@@ -35,12 +35,11 @@ class Member extends RestController
             'passwd' => $this->post('passwd'),
         ];
         
-        if($this->member->loginMember($data)) {
-            return $this->response('success',200);
+        if ($this->member->loginMember($data)) {
+            return $this->response('success', 200);
         } else {
-            return $this->response('id또는 비밀번호가 틀렸습니다.',405);
+            return $this->response('id또는 비밀번호가 틀렸습니다.', 405);
         }
-        
     }
 
     public function logout_post()
@@ -48,6 +47,6 @@ class Member extends RestController
         $this->load->library('session');
         $this->session->sess_destroy();
 
-        return $this->response('success',200);
+        return $this->response('success', 200);
     }
 }

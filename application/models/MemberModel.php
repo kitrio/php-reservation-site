@@ -11,7 +11,7 @@ class MemberModel extends CI_MODEL
     public function createMember($data)
     {
         $passwd = $data['passwd'];
-        $passwd = password_hash($passwd,PASSWORD_BCRYPT);
+        $passwd = password_hash($passwd, PASSWORD_BCRYPT);
 
         $this->db->set('id', $data['memberid']);
         $this->db->set('passwd', $passwd);
@@ -22,13 +22,11 @@ class MemberModel extends CI_MODEL
 
         $this->db->insert('member');
         //var_dump($this->db->error());
-        if($this->db->error()['code'] === $DUPLICATION_ERROR)
-        {
+        if ($this->db->error()['code'] === $DUPLICATION_ERROR) {
             return 'duplication';
         } else {
             return true;
         }
-
     }
 
     private function passwordMatch(string $memberid, string $passwd): bool
@@ -44,8 +42,7 @@ class MemberModel extends CI_MODEL
 
     public function loginMember($data)
     {
-        if($this->passwordMatch($data['memberid'], $data['passwd']))
-        {
+        if ($this->passwordMatch($data['memberid'], $data['passwd'])) {
             $id = $data['memberid'];
             $this->db->select('name')
                      ->where('id', $id);
@@ -57,6 +54,5 @@ class MemberModel extends CI_MODEL
         } else {
             return false;
         }
-
     }
 }

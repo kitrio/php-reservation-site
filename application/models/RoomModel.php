@@ -2,7 +2,6 @@
 
 class RoomModel extends CI_MODEL
 {
-
     public function __construct()
     {
         parent::__construct();
@@ -13,7 +12,7 @@ class RoomModel extends CI_MODEL
         $query = $this->db->get('room')->result_array();
         $files = $this->db->get('file')->result_array();
  
-        foreach($query as $key => $room) {
+        foreach ($query as $key => $room) {
             foreach ($files as $file => $image) {
                 if ($room['room_number'] == $image['room_number']) {
                     $query[$key]["image"][] = $files[$file];
@@ -30,5 +29,4 @@ class RoomModel extends CI_MODEL
         
         return $this->db->get('room')->result_array();
     }
-
 }

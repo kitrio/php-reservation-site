@@ -1,11 +1,11 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 use chriskacerguis\RestServer\RestController;
 
-class Reservation extends RestController {
-
-    function __construct()
+class Reservation extends RestController
+{
+    public function __construct()
     {
         parent::__construct(); //super
         $this->load->library('Reservationservice');
@@ -22,7 +22,7 @@ class Reservation extends RestController {
         ];
 
         $info = $this->reservationservice->checkReservation($data['checkIn'], $data['checkOut']);
-        if($info === null){
+        if ($info === null) {
             return $this->response($info, 404);
         }
         return $this->response($info, 200);
@@ -37,15 +37,14 @@ class Reservation extends RestController {
             'checkin' => $this->post('checkin'),
             'checkout' => $this->post('checkout')
         ];
-        if($data['memberid'] === null){
-            return $this->response('not login',405);
+        if ($data['memberid'] === null) {
+            return $this->response('not login', 405);
         }
 
         $info = $this->reservationservice->reservation($data['memberid'], $data['room_number'], $data['checkin'], $data['checkout']);
-        if ($info){
+        if ($info) {
             return $this->response($info, 404);
         }
         return $this->response($info, 200);
     }
-
 }

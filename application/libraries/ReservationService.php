@@ -1,18 +1,18 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 
 class ReservationService
 {
     private $CI;
 
-    function __construct()
+    public function __construct()
     {
         $this->CI = get_instance();
-        $this->CI->load->model("RoomModel","roomModel",true); //DB 연결
-        $this->CI->load->model("ReservationModel","reservationModel",true);
+        $this->CI->load->model("RoomModel", "roomModel", true); //DB 연결
+        $this->CI->load->model("ReservationModel", "reservationModel", true);
     }
 
-    function reservation(string $memberid, int $roomNumber, $checkinDay, $checkoutDay)
+    public function reservation(string $memberid, int $roomNumber, $checkinDay, $checkoutDay)
     {
         $roomInfo = $this->CI->roomModel->getRoominfoByNum($roomNumber);
 
@@ -39,12 +39,9 @@ class ReservationService
         $rooms =  $this->CI->roomModel->getAllRoominfo();
         $reservation =  $this->CI->reservationModel->getReselvationInfo($checkinDay, $checkoutDay);
 
-        foreach ($rooms as $key => $roominfo)
-        {
-            foreach ($reservation as $reservationKey => $reservationinfo)
-            {
-                if($roominfo['room_number'] === $reservationinfo['fk_room_number'])
-                {
+        foreach ($rooms as $key => $roominfo) {
+            foreach ($reservation as $reservationKey => $reservationinfo) {
+                if ($roominfo['room_number'] === $reservationinfo['fk_room_number']) {
                     unset($rooms[$key]); //remove
                 }
             }
@@ -52,6 +49,4 @@ class ReservationService
 
         return $rooms;
     }
-
-
 }
