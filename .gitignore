@@ -1,6 +1,7 @@
 
 /system
 application/config/database.php
+application/config/rest.php
 user_guide
 
 
@@ -12,7 +13,6 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
-
 
 /vendor/
 
@@ -27,3 +27,6 @@ application/logs/*
 *.stTheme.cache
 *.sublime-workspace
 *.sublime-project
+
+# vscode
+.vscode/launch.json
