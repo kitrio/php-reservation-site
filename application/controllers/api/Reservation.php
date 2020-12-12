@@ -7,13 +7,13 @@ class Reservation extends RestController
 {
     public function __construct()
     {
-        parent::__construct(); //super
-        $this->load->library('Reservationservice');
+        parent::__construct();
+        $this->load->library('ReservationService');
         $this->load->library('session');
     }
 
     //예약확인
-    public function check_post()
+    public function reservation_get()//check_post()
     {
         $data = [
             'people' => (int)$this->post('people'),
@@ -23,13 +23,13 @@ class Reservation extends RestController
 
         $info = $this->reservationservice->checkReservation($data['checkIn'], $data['checkOut']);
         if ($info === null) {
-            return $this->response($info, 404);
+            return $this->response("msg:fail", 404);
         }
         return $this->response($info, 200);
     }
     
     //예약
-    public function set_post()
+    public function reservation_post()
     {
         $data = [
             'room_number' => (int)$this->post('room_number'),
@@ -38,13 +38,14 @@ class Reservation extends RestController
             'checkout' => $this->post('checkout')
         ];
         if ($data['memberid'] === null) {
-            return $this->response('not login', 405);
+            return $this->response('msg: not login', 401);
         }
 
         $info = $this->reservationservice->reservation($data['memberid'], $data['room_number'], $data['checkin'], $data['checkout']);
         if ($info) {
-            return $this->response($info, 404);
+            return $this->response("msg:fail", 404);
         }
+
         return $this->response($info, 200);
     }
 }
